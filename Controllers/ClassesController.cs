@@ -75,7 +75,7 @@ namespace jQuery_Practice.Controllers
         }
     
         [HttpPost("create")]
-        public async Task<ActionResult<Class>> Create(Class newClass)
+        public async Task<ActionResult<Class>> Create([FromForm] Class newClass)
         {
             int newId;
 

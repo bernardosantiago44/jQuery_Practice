@@ -5,15 +5,42 @@
     <title></title>
 </head>
 <body>
+    <h2>Classes</h2>
+    <form id="classForm">
+        <input type="text" id="name" placeholder="Class name" required/>
+        <input type="text" id="instructor" placeholder="Teacher" required/>
+        <input type="number" id="credits" placeholder="Academic credits" required />
+        <button type="submit">Add new class</button>
+    </form>
+
+    <ul id="class-list"></ul>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function loadClasses() {
-            $.post('/api/classes/all', function (data) {
-                data.forEach(classObj => {
-                    console.log(classObj);
+            $.post('/api/classes/all', data => {
+                $('#class-list').empty();
+                data.forEach(classObject => {
+                    $('#class-list').append(`
+                        <li> ${classObject.name} - ${classObject.instructor} - ${classObject.academicCredits} academic credits </li>
+                    `);
                 });
             });
         }
+
+        $('#classForm').submit(form => {
+            form.preventDefault();
+            $.post('/api/classes/create', {
+                name: $('#name').val(),
+                instructor: $('#instructor').val(),
+                academicCredits: $('#credits').val()
+            }, () => {
+                loadClasses();
+                $('#classForm')[0].reset();
+            });
+        });
+
+        $(document).ready(loadClasses);
     </script>
 
 </body>
