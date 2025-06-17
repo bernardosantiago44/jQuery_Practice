@@ -1,27 +1,23 @@
 ﻿{
-  "AllowedHosts": "*",
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=192.168.0.105,1433;Database=ShopDb;User Id=sa;Password=Bernardo1234!;TrustServerCertificate=True;"
-  },
-  "Serilog": {
-    "Using": [ "Serilog.Sinks.File" ],
-    "MinimumLevel": {
-      "Default": "Debug",
-      "Override": {
-        "Microsoft": "Warning",
-        "System": "Warning"
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5014",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "WriteTo": [
-      {
-        "Name": "File",
-        "Args": {
-          "path": "Logs/log-.txt",
-          "rollingInterval": "Day",
-          "outputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
-          "shared": true
-        }
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7221;http://localhost:5014",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    ]
+    }
   }
 }
