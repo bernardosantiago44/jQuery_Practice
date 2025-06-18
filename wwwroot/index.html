@@ -3,29 +3,106 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <style>
+        .gridbox_mterial .xhdr {
+            background-color: #2ecc71 !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        .ev_material td {
+            background-color: #eafaf1;
+            border: 1px solid #d4f4df;
+            padding: 8px;
+            color: #4f4f4f;
+        }
+
+        .odd_material td {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px;
+            color: #4f4f4f;
+        }
+
+        .rowselected td, .ev_material.rowselected td, .odd_material.rowselected td {
+            background-color: #2ecc71;
+            color: white;
+            font-weight: bold;
+        }
+
+        .page-item.active .page-link {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+            color: white;
+        }
+
+        .page-link:hover {
+            background-color: #d4f4df;
+            border-color: #2ecc71;
+            color: #2e7d50;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .page-link {
+            color: #2f4f4f;
+            border: 1px solid #d4f4df;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .pagination {
+            margin-top: 1.5rem;
+        }
+
+
+        .dhtmlx_grid .obj tr:hover td {
+            background-color: #d4f4df;
+        }
+
+        #grid_container {
+            border: 2px solid #2ecc71;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <h2>Classes</h2>
     <form id="classForm">
-        <input type="text" id="name" placeholder="Class name" required/>
-        <input type="text" id="instructor" placeholder="Teacher" required/>
+        <input type="text" id="name" placeholder="Class name" required />
+        <input type="text" id="instructor" placeholder="Teacher" required />
         <input type="number" id="credits" placeholder="Academic credits" required />
         <button type="submit">Add new class</button>
     </form>
 
+    <div id="grid_container" style="width: 40%; height: 400px;"></div>
+
     <ul id="class-list"></ul>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/Dhtmlx/codebase/dhtmlx.js"></script>
+
     <script>
+        var grid;
+
         function loadClasses() {
             $.post('/api/classes/all', data => {
                 $('#class-list').empty();
+                grid.clearAll();
                 data.forEach(classObject => {
-                    $('#class-list').append(`
-                        <li> ${classObject.name} - ${classObject.instructor} - ${classObject.academicCredits} academic credits </li>
-                    `);
+                    grid.addRow(classObject.id, [classObject.id, classObject.name, classObject.instructor, classObject.academicCredits]);
                 });
             });
+        }
+
+        function constructGrid() {
+            grid = new dhtmlXGridObject("grid_container");
+            grid.setHeader("ID,Name,Instructor,Academic credits");
+            grid.setInitWidths("50,*,200,100");
+            grid.setColAlign("left,left,left,center");
+            grid.setColTypes("ro,ro,ro,ro,ro");
+            grid.setColSorting("int,str,str,str,int");
+
+            grid.init();
         }
 
         $('#classForm').submit(form => {
@@ -40,6 +117,7 @@
             });
         });
 
+        $(document).ready(constructGrid);
         $(document).ready(loadClasses);
     </script>
 
